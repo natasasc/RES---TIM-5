@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataAccess;
 
 namespace CalculationFunction
 {
@@ -10,14 +11,15 @@ namespace CalculationFunction
     {
         public static void IdAcceptance(int id)
         {
-
-            //List<Data> data = funkcija koja ce biti u data access(DateTime.Now)
-            DateTime poslednjeVrijemeMjerenja = DateTime.Now; //data[data.length-1]
+            
+            List<Data> data = DataAccess.DataProcessing.ToCalculationFunction(DateTime.Now);
+            DateTime poslednjeVrijemeMjerenja = data[data.Count() - 1].DateAndTime;
             List<float> usages = new List<float>();
-            //foreach(float in data.usage)
-            //{
-            //    usages.Add(i);
-            //}
+
+            foreach (Data i in data)
+            {
+                usages.Add(i.Usage);
+            }
 
             switch (id)
             {
@@ -35,10 +37,12 @@ namespace CalculationFunction
 
         private static void CalculationFunction1(List<float> usages, DateTime poslednjeVrijemeMjerenja)
         {
-
             float average = 0;
             average = usages.Average();
-            //funkcija koja ce upisivati u bazu podataka (average, DateTime.Now, poslednjeVrijemeMjerenja)
+
+            //funkcija koja ce upisati podatke u bazu podataka
+            DataAccess.DataProcessing.FromCalculationFunction(average, DateTime.Now, poslednjeVrijemeMjerenja);
+
             //funkcija za proslijedjivanje resident executoru
         }
 
@@ -46,7 +50,11 @@ namespace CalculationFunction
         {
             float min = 0;
             min = usages.Min();
-            //funkcija koja ce upisivati u bazu podataka (min, DateTime.Now, poslednjeVrijemeMjerenja)
+
+            //funkcija koja ce upisati podatke u bazu podataka
+            DataAccess.DataProcessing.FromCalculationFunction(min, DateTime.Now, poslednjeVrijemeMjerenja);
+
+
             //funkcija za proslijedjivanje resident executoru
         }
 
@@ -54,7 +62,11 @@ namespace CalculationFunction
         {
             float max = 0;
             max = usages.Max();
-            //funkcija koja ce upisivati u bazu podataka (max, DateTime.Now, poslednjeVrijemeMjerenja)
+
+            //funkcija koja ce upisati podatke u bazu podataka
+            DataAccess.DataProcessing.FromCalculationFunction(max, DateTime.Now, poslednjeVrijemeMjerenja);
+
+
             //funkcija za proslijedjivanje resident executoru
         }
     }

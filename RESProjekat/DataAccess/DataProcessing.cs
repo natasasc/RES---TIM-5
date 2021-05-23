@@ -3,38 +3,74 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataAccess.DAO;
+using DataAccess.DAO.Impl;
 
 namespace DataAccess
 {
     public class DataProcessing
     {
-        //funkcija za proslijedjivanje podataka calculationfunction komponenti
-        public List<Data> ToCalculationFunction(DateTime date)
+        //*********************************
+        private static readonly IDataDAO dataDAO = new DataDAOImpl();
+
+
+        //funkcija za proslijedjivanje podataka CalculationfFunction komponenti
+        public static List<Data> ToCalculationFunction(DateTime date)
         {
-            //upit za odgovarajuci datum i da ima oznaku da je od stane klijenta tj da je poslednje vrijeme proracuna null
-            List<Data> listaObjekata = new List<Data>(); //ono sto je vratio upit
+            List<Data> listaObjekata = dataDAO.FindAll().ToList();
+            List<Data> novaLista = new List<Data>();
+
             listaObjekata.Sort((x, y) => DateTime.Compare(x.DateAndTime, y.DateAndTime));
-            return listaObjekata;
+
+            string[] datumIVreme;
+
+            string datum = "1.1.0001 00.00.00";     //defaultni DateTime
+            string[] danasnjiDatum;
+
+            foreach(Data d in listaObjekata)
+            {
+                datumIVreme = d.DateAndTime.ToString().Split(' ');
+                danasnjiDatum = DateTime.Now.ToString().Split(' ');
+
+                if(d.LastDateAndTime.ToString() != datum && datumIVreme[0] != danasnjiDatum[0])
+                {
+                    novaLista.Add(d);
+                }
+            }
+            return novaLista;
         }
 
-        //funkcija za upis od strane klijenta
-        public void FromClient(float usage, DateTime time)
+        //funkcija za upis podataka u bazu podataka koje je poslao Client
+        public static void FromClient(float usage, DateTime time)
         {
-            //upis u bazu podataka, poslednja kolona NULL
+            Data noviPodatak = new Data(usage, time, new DateTime());
+            dataDAO.Save(noviPodatak);
         }
 
-        //funkcija za upis od stane calculationfunction
-        public void FromCalculationFunction(float result, DateTime time, DateTime lastTime)
+        //funkcija za upis podataka u bazu podataka koje je prolijedio CalculationFunction
+        public static void FromCalculationFunction(float result, DateTime time, DateTime lastTime)
         {
-            //upis u bazu podataka
+            Data noviPodatak = new Data(result, time, lastTime);
+            dataDAO.Save(noviPodatak);
         }
 
-        //funkcija za proslijedjivanje vrijednosti klijentima
-        public List<Data> ToClient()
+        //funkcija za proslijedjivanje vrijednosti Client komponenti
+        public static List<Data> ToClient()
         {
             //upis da li je poslednja kolona NULL
-            List<Data> lista = new List<Data>();
-            return lista;
+            List<Data> listaObjekata = dataDAO.FindAll().ToList();
+            List<Data> novaLista = new List<Data>();
+
+            foreach(Data d in listaObjekata)
+            {
+                if(d.LastDateAndTime.ToString() != "1.1.0001 00.00.00")
+                {
+                    novaLista.Add(d);
+                }
+            }
+
+            //proslijediti klijentu u funkciji
+            return listaObjekata;
         }
     }
 }
