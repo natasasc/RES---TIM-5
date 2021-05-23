@@ -8,7 +8,7 @@ namespace CalculationFunction
 {
     public class Functions
     {
-        public void IdAcceptance(int id)
+        public static void IdAcceptance(int id)
         {
 
             //List<Data> data = funkcija koja ce biti u data access(DateTime.Now)
@@ -33,7 +33,7 @@ namespace CalculationFunction
             }
         }
 
-        private void CalculationFunction1(List<float> usages, DateTime poslednjeVrijemeMjerenja)
+        private static void CalculationFunction1(List<float> usages, DateTime poslednjeVrijemeMjerenja)
         {
 
             float average = 0;
@@ -42,7 +42,7 @@ namespace CalculationFunction
             //funkcija za proslijedjivanje resident executoru
         }
 
-        private void CalculationFunction2(List<float> usages, DateTime poslednjeVrijemeMjerenja)
+        private static void CalculationFunction2(List<float> usages, DateTime poslednjeVrijemeMjerenja)
         {
             float min = 0;
             min = usages.Min();
@@ -50,7 +50,7 @@ namespace CalculationFunction
             //funkcija za proslijedjivanje resident executoru
         }
 
-        private void CalculationFunction3(List<float> usages, DateTime poslednjeVrijemeMjerenja)
+        private static void CalculationFunction3(List<float> usages, DateTime poslednjeVrijemeMjerenja)
         {
             float max = 0;
             max = usages.Max();
