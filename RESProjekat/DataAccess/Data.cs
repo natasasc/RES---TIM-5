@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,11 +11,13 @@ namespace DataAccess
     {
         public DateTime DateAndTime { get; set; }
         public float Usage { get; set; }
+        public DateTime LastDateAndTime { get; set; }
 
-        public Data(DateTime dateAndTime, float usage)
+        public Data(float usage, DateTime dateAndTime, DateTime lastDateAndTime)
         {
-            DateAndTime = dateAndTime;
             Usage = usage;
+            DateAndTime = dateAndTime;
+            LastDateAndTime = lastDateAndTime;
         }
     }
 }
