@@ -24,7 +24,6 @@ namespace DataAccess
 
             string[] datumIVreme;
 
-            string datum = "1.1.0001 00.00.00";     //defaultni DateTime
             string[] danasnjiDatum;
 
             foreach(Data d in listaObjekata)
@@ -32,7 +31,7 @@ namespace DataAccess
                 datumIVreme = d.DateAndTime.ToString().Split(' ');
                 danasnjiDatum = DateTime.Now.ToString().Split(' ');
 
-                if(d.LastDateAndTime.ToString() != datum && datumIVreme[0] != danasnjiDatum[0])
+                if(d.LastDateAndTime == null && datumIVreme[0] == danasnjiDatum[0])
                 {
                     novaLista.Add(d);
                 }
@@ -43,7 +42,7 @@ namespace DataAccess
         //funkcija za upis podataka u bazu podataka koje je poslao Client
         public static void FromClient(float usage, DateTime time)
         {
-            Data noviPodatak = new Data(usage, time, new DateTime());
+            Data noviPodatak = new Data(usage, time, null);
             dataDAO.Save(noviPodatak);
         }
 
@@ -63,7 +62,7 @@ namespace DataAccess
 
             foreach(Data d in listaObjekata)
             {
-                if(d.LastDateAndTime.ToString() != "1.1.0001 00.00.00")
+                if(d.LastDateAndTime != null)
                 {
                     novaLista.Add(d);
                 }
