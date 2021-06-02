@@ -4,70 +4,111 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataAccess;
+using Database;
 
 namespace CalculationFunction
 {
     public class Functions
     {
-        public static void IdAcceptance(int id)
+        public static double IdAcceptance(int id)
         {
             
-            List<Data> data = DataAccess.DataProcessing.ToCalculationFunction(DateTime.Now);
-            DateTime poslednjeVrijemeMjerenja = data[data.Count() - 1].DateAndTime;
-            List<float> usages = new List<float>();
+            List<Tabela> data = DataProcessing.ToCalculationFunction();
 
-            foreach (Data i in data)
+            List<Tabela> clientData = new List<Tabela>();
+            List<Tabela> functionsData = new List<Tabela>();
+
+            foreach (var item in data)
             {
-                usages.Add(i.Usage);
+                if (item.Funkcija == null)
+                    clientData.Add(item);
             }
+
+            DateTime poslednjiUpisKlijenta = clientData[clientData.Count - 1].VremeProracuna;
+
+            string funcID = null;
+            switch (id)
+            {
+                case 1: 
+                    funcID = "CF1";
+                    break;
+                case 2:
+                    funcID = "CF2";
+                    break;
+                case 3:
+                    funcID = "CF3";
+                    break;
+            }
+
+            foreach (var item in data)
+            {
+                if (item.Funkcija != null && item.Funkcija == funcID)
+                    functionsData.Add(item);
+            }
+
+            functionsData = functionsData.OrderBy(o => o.PoslednjeVremeMerenja).ToList();
+            DateTime? poslednjeMerenje = functionsData[functionsData.Count - 1].PoslednjeVremeMerenja;
+
+            if (poslednjiUpisKlijenta == poslednjeMerenje)
+                return -1;
+
+
+            List<double> usages = new List<double>();
+
+            foreach (Tabela i in clientData)
+            {
+                usages.Add(i.Potrosnja);
+            }
+
+            double ret = -1;
 
             switch (id)
             {
                 case 1:
-                    CalculationFunction1(usages, poslednjeVrijemeMjerenja);
+                    ret = CalculationFunction1(usages, poslednjiUpisKlijenta);
                     break;
                 case 2:
-                    CalculationFunction2(usages, poslednjeVrijemeMjerenja);
+                    ret = CalculationFunction2(usages, poslednjiUpisKlijenta);
                     break;
                 case 3:
-                    CalculationFunction3(usages, poslednjeVrijemeMjerenja);
+                    ret = CalculationFunction3(usages, poslednjiUpisKlijenta);
                     break;
             }
+
+            return ret;
         }
 
-        private static void CalculationFunction1(List<float> usages, DateTime poslednjeVrijemeMjerenja)
+        private static double CalculationFunction1(List<double> usages, DateTime poslednjeVrijemeMjerenja)
         {
-            float average = 0;
+            double average = 0;
             average = usages.Average();
 
             //funkcija koja ce upisati podatke u bazu podataka
-            DataAccess.DataProcessing.FromCalculationFunction(average, DateTime.Now, poslednjeVrijemeMjerenja);
+            DataProcessing.FromCalculationFunction(average, DateTime.Now, poslednjeVrijemeMjerenja, "CF1");
 
-            //funkcija za proslijedjivanje resident executoru
+            return average;
         }
 
-        private static void CalculationFunction2(List<float> usages, DateTime poslednjeVrijemeMjerenja)
+        private static double CalculationFunction2(List<double> usages, DateTime poslednjeVrijemeMjerenja)
         {
-            float min = 0;
+            double min = 0;
             min = usages.Min();
 
             //funkcija koja ce upisati podatke u bazu podataka
-            DataAccess.DataProcessing.FromCalculationFunction(min, DateTime.Now, poslednjeVrijemeMjerenja);
+            DataProcessing.FromCalculationFunction(min, DateTime.Now, poslednjeVrijemeMjerenja, "CF2");
 
-
-            //funkcija za proslijedjivanje resident executoru
+            return min;
         }
 
-        private static void CalculationFunction3(List<float> usages, DateTime poslednjeVrijemeMjerenja)
+        private static double CalculationFunction3(List<double> usages, DateTime poslednjeVrijemeMjerenja)
         {
-            float max = 0;
+            double max = 0;
             max = usages.Max();
 
             //funkcija koja ce upisati podatke u bazu podataka
-            DataAccess.DataProcessing.FromCalculationFunction(max, DateTime.Now, poslednjeVrijemeMjerenja);
+            DataProcessing.FromCalculationFunction(max, DateTime.Now, poslednjeVrijemeMjerenja, "CF3");
 
-
-            //funkcija za proslijedjivanje resident executoru
+            return max;
         }
     }
 }
