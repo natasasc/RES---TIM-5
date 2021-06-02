@@ -22,7 +22,7 @@ namespace DataAccess
         }
 
         //funkcija za upis podataka u bazu podataka koje je poslao Client
-        public static void FromClient(float usage, DateTime time, string city)
+        public static void FromClient(double usage, DateTime time, string city)
         {
             int max = GetMaxID();
 
@@ -77,7 +77,7 @@ namespace DataAccess
         }
 
 
-        private static int GetMaxID()
+        public static int GetMaxID()
         {
             int max = 0;
 
