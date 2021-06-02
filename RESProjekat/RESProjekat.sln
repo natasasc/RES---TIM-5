@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\Da
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResidentExecutor", "ResidentExecutor\ResidentExecutor.csproj", "{AAC159B7-11B0-4C6B-AD00-F18F69B23FD9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{3E21D3F6-C94C-44D5-A82C-B864F42E821C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{AAC159B7-11B0-4C6B-AD00-F18F69B23FD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AAC159B7-11B0-4C6B-AD00-F18F69B23FD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AAC159B7-11B0-4C6B-AD00-F18F69B23FD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E21D3F6-C94C-44D5-A82C-B864F42E821C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E21D3F6-C94C-44D5-A82C-B864F42E821C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E21D3F6-C94C-44D5-A82C-B864F42E821C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E21D3F6-C94C-44D5-A82C-B864F42E821C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

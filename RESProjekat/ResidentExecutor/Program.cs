@@ -23,10 +23,15 @@ namespace ResidentExecutor
 
             Console.Write("Broj sekundi izmedju poziva funkcija: " + seconds.ToString());
 
+            double value;
             for (int i = 0; i < list.Count; i++)
             {
                 Console.WriteLine("Poziv funkcije " + list[i].InnerText.ToString());
-                Functions.IdAcceptance(int.Parse(list[i].InnerText));
+                value = Functions.IdAcceptance(int.Parse(list[i].InnerText));
+                if (value != -1)
+                {
+                    // upis u xml
+                }
                 System.Threading.Thread.Sleep(seconds * 1000);
             }
 
