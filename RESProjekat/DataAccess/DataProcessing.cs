@@ -1,75 +1,96 @@
-﻿using System;
+﻿using Database;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DataAccess.DAO;
-using DataAccess.DAO.Impl;
 
 namespace DataAccess
 {
     public class DataProcessing
     {
-        //*********************************
-        private static readonly IDataDAO dataDAO = new DataDAOImpl();
-
+        private static sqlDBEntities context = new sqlDBEntities();
 
         //funkcija za proslijedjivanje podataka CalculationfFunction komponenti
-        public static List<Data> ToCalculationFunction(DateTime date)
+        public static List<Tabela> ToCalculationFunction()
         {
-            List<Data> listaObjekata = dataDAO.FindAll().ToList();
-            List<Data> novaLista = new List<Data>();
+            List<Tabela> listaObjekata = context.Tabela.ToList();
 
-            listaObjekata.Sort((x, y) => DateTime.Compare(x.DateAndTime, y.DateAndTime));
+            listaObjekata.Sort((x, y) => DateTime.Compare(x.VremeProracuna, y.VremeProracuna));
 
-            string[] datumIVreme;
-
-            string[] danasnjiDatum;
-
-            foreach(Data d in listaObjekata)
-            {
-                datumIVreme = d.DateAndTime.ToString().Split(' ');
-                danasnjiDatum = DateTime.Now.ToString().Split(' ');
-
-                if(d.LastDateAndTime == null && datumIVreme[0] == danasnjiDatum[0])
-                {
-                    novaLista.Add(d);
-                }
-            }
-            return novaLista;
+            return listaObjekata;
         }
 
         //funkcija za upis podataka u bazu podataka koje je poslao Client
-        public static void FromClient(float usage, DateTime time)
+        public static void FromClient(float usage, DateTime time, string city)
         {
-            Data noviPodatak = new Data(usage, time, null);
-            dataDAO.Save(noviPodatak);
+            int max = GetMaxID();
+
+            Tabela noviPodatak = new Tabela()
+            {
+                ID = ++max,
+                Potrosnja = usage,
+                VremeProracuna = time,
+                PoslednjeVremeMerenja = null,
+                Grad = city,
+                Funkcija = null
+            };
+
+            context.Tabela.Add(noviPodatak);
+            context.SaveChanges();
         }
 
         //funkcija za upis podataka u bazu podataka koje je prolijedio CalculationFunction
-        public static void FromCalculationFunction(float result, DateTime time, DateTime lastTime)
+        public static void FromCalculationFunction(double result, DateTime time, DateTime lastTime, string funcID)
         {
-            Data noviPodatak = new Data(result, time, lastTime);
-            dataDAO.Save(noviPodatak);
+            int max = GetMaxID();
+
+            Tabela noviPodatak = new Tabela()
+            {
+                ID = ++max,
+                Potrosnja = result,
+                VremeProracuna = time,
+                PoslednjeVremeMerenja = lastTime,
+                Grad = null,
+                Funkcija = funcID
+            };
+
+            context.Tabela.Add(noviPodatak);
+            context.SaveChanges();
         }
 
         //funkcija za proslijedjivanje vrijednosti Client komponenti
-        public static List<Data> ToClient()
+        public static List<Tabela> ToClient()
         {
-            //upis da li je poslednja kolona NULL
-            List<Data> listaObjekata = dataDAO.FindAll().ToList();
-            List<Data> novaLista = new List<Data>();
+            List<Tabela> listaObjekata = context.Tabela.ToList();
+            List<Tabela> novaLista = new List<Tabela>();
 
-            foreach(Data d in listaObjekata)
+            foreach(Tabela d in listaObjekata)
             {
-                if(d.LastDateAndTime != null)
+                if(d.Funkcija != null)
                 {
                     novaLista.Add(d);
                 }
             }
 
-            //proslijediti klijentu u funkciji
-            return listaObjekata;
+            return novaLista;
+        }
+
+
+        private static int GetMaxID()
+        {
+            int max = 0;
+
+            List<Tabela> lista = new List<Tabela>();
+            lista = context.Tabela.ToList();
+            max = lista[0].ID;
+            foreach (Tabela t in lista)
+            {
+                if (t.ID > max)
+                    max = t.ID;
+            }
+
+            return max;
         }
     }
 }
