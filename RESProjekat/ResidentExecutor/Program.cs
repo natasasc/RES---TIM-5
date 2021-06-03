@@ -21,21 +21,36 @@ namespace ResidentExecutor
             XmlNodeList time = xmlDoc.GetElementsByTagName("time");
             int seconds = int.Parse(time[0].InnerText);
 
-            Console.Write("Broj sekundi izmedju poziva funkcija: " + seconds.ToString());
+            Console.Write("Broj sekundi izmedju poziva funkcija: " + seconds.ToString() + "\n");
 
             double value;
-            for (int i = 0; i < list.Count; i++)
+            while (true)
             {
-                Console.WriteLine("Poziv funkcije " + list[i].InnerText.ToString());
-                value = Functions.IdAcceptance(int.Parse(list[i].InnerText));
-                if (value != -1)
+                for (int i = 0; i < list.Count; i++)
                 {
-                    // upis u xml
+                    Console.WriteLine("Poziv funkcije " + list[i].InnerText.ToString());
+                    value = Functions.IdAcceptance(int.Parse(list[i].InnerText));
+                    if (value != -1)
+                    {
+                        WriteData(value);
+                    }
+                    System.Threading.Thread.Sleep(seconds * 1000);
                 }
-                System.Threading.Thread.Sleep(seconds * 1000);
             }
 
-            Console.ReadLine();
+            //Console.ReadLine();
+        }
+
+        private static void WriteData(double value)
+        {
+            string xmlPath = Directory.GetCurrentDirectory() + @"\funcData.xml";
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(xmlPath);
+
+            XmlNode potrosnja = xmlDoc.CreateElement("usage");
+            potrosnja.InnerText = value.ToString();
+            xmlDoc.DocumentElement.AppendChild(potrosnja);
+            xmlDoc.Save(xmlPath);
         }
     }
 }
