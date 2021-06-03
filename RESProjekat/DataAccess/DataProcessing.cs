@@ -51,7 +51,7 @@ namespace DataAccess
                 Potrosnja = result,
                 VremeProracuna = time,
                 PoslednjeVremeMerenja = lastTime,
-                Grad = null,
+                Grad = "",
                 Funkcija = funcID
             };
 
