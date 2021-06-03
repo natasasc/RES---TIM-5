@@ -47,7 +47,10 @@ namespace CalculationFunction
             }
 
             functionsData = functionsData.OrderBy(o => o.PoslednjeVremeMerenja).ToList();
-            DateTime? poslednjeMerenje = functionsData[functionsData.Count - 1].PoslednjeVremeMerenja;
+
+            DateTime? poslednjeMerenje = null;
+            if (functionsData.Count > 0)
+                poslednjeMerenje = functionsData[functionsData.Count - 1].PoslednjeVremeMerenja;
 
             if (poslednjiUpisKlijenta == poslednjeMerenje)
                 return -1;
