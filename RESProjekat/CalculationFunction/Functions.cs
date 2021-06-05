@@ -1,35 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common;
 using DataAccess;
-using Database;
 
 namespace CalculationFunction
 {
-    public class Functions
+    public class Functions : IExecute
     {
-        public static double IdAcceptance(int id)
+        private readonly ICRUD dp = new DataAccess.DataProcessing();
+        public double IdAcceptance(int id)
         {
-            
-            List<Tabela> data = DataProcessing.ToCalculationFunction();
-
-            List<Tabela> clientData = new List<Tabela>();
-            List<Tabela> functionsData = new List<Tabela>();
-
-            foreach (var item in data)
-            {
-                if (item.Funkcija == null)
-                    clientData.Add(item);
-            }
-
-            DateTime poslednjiUpisKlijenta = clientData[clientData.Count - 1].VremeProracuna;
-
             string funcID = null;
+            if (id != 1 && id != 2 && id != 3)
+                throw new ArgumentException("Id funkcije moze imati vrednosti 1, 2 ili 3.");
+
             switch (id)
             {
-                case 1: 
+                case 1:
                     funcID = "CF1";
                     break;
                 case 2:
@@ -40,11 +31,43 @@ namespace CalculationFunction
                     break;
             }
 
+            return Load(funcID, id);
+        }
+
+        [ExcludeFromCodeCoverage]
+        public double Load(string funcID, int id)
+        {
+            List<IData> data = dp.ToCalculationFunction();
+
+            List<IData> clientData = new List<IData>();
+            List<IData> functionsData = new List<IData>();
+
+            foreach (var item in data)
+            {
+                if (item.Funkcija == null)
+                    clientData.Add(item);
+            }
+
             foreach (var item in data)
             {
                 if (item.Funkcija != null && item.Funkcija == funcID)
                     functionsData.Add(item);
             }
+
+            return CallCF(functionsData, clientData, id);
+        }
+
+        public double CallCF(List<IData> functionsData, List<IData> clientData, int id)
+        {
+            if (functionsData == null || clientData == null)
+                throw new ArgumentNullException("Liste ne mogu biti null.");
+
+            if (clientData.Count == 0)
+                throw new ArgumentException("Nema podataka koje je klijent upisao");
+
+            clientData = clientData.OrderBy(o => o.VremeProracuna).ToList();
+
+            DateTime poslednjiUpisKlijenta = clientData[clientData.Count - 1].VremeProracuna;
 
             functionsData = functionsData.OrderBy(o => o.PoslednjeVremeMerenja).ToList();
 
@@ -55,10 +78,9 @@ namespace CalculationFunction
             if (poslednjiUpisKlijenta == poslednjeMerenje)
                 return -1;
 
-
             List<double> usages = new List<double>();
 
-            foreach (Tabela i in clientData)
+            foreach (IData i in clientData)
             {
                 usages.Add(i.Potrosnja);
             }
@@ -81,35 +103,35 @@ namespace CalculationFunction
             return ret;
         }
 
-        private static double CalculationFunction1(List<double> usages, DateTime poslednjeVrijemeMjerenja)
+        public double CalculationFunction1(List<double> usages, DateTime poslednjeVrijemeMjerenja)
         {
             double average = 0;
             average = usages.Average();
 
             //funkcija koja ce upisati podatke u bazu podataka
-            DataProcessing.FromCalculationFunction(average, DateTime.Now, poslednjeVrijemeMjerenja, "CF1");
+            dp.FromCalculationFunction(average, DateTime.Now, poslednjeVrijemeMjerenja, "CF1");
 
             return average;
         }
 
-        private static double CalculationFunction2(List<double> usages, DateTime poslednjeVrijemeMjerenja)
+        public double CalculationFunction2(List<double> usages, DateTime poslednjeVrijemeMjerenja)
         {
             double min = 0;
             min = usages.Min();
 
             //funkcija koja ce upisati podatke u bazu podataka
-            DataProcessing.FromCalculationFunction(min, DateTime.Now, poslednjeVrijemeMjerenja, "CF2");
+            dp.FromCalculationFunction(min, DateTime.Now, poslednjeVrijemeMjerenja, "CF2");
 
             return min;
         }
 
-        private static double CalculationFunction3(List<double> usages, DateTime poslednjeVrijemeMjerenja)
+        public double CalculationFunction3(List<double> usages, DateTime poslednjeVrijemeMjerenja)
         {
             double max = 0;
             max = usages.Max();
 
             //funkcija koja ce upisati podatke u bazu podataka
-            DataProcessing.FromCalculationFunction(max, DateTime.Now, poslednjeVrijemeMjerenja, "CF3");
+            dp.FromCalculationFunction(max, DateTime.Now, poslednjeVrijemeMjerenja, "CF3");
 
             return max;
         }
