@@ -1,75 +1,69 @@
-﻿using Database;
+﻿using Common;
+using Database;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DataAccess
 {
-    public class DataProcessing
+    public class DataProcessing : ICRUD, ICommunication
     {
         private static sqlDBEntities context = new sqlDBEntities();
 
-        //funkcija za proslijedjivanje podataka CalculationfFunction komponenti
-        public static List<Tabela> ToCalculationFunction()
+        [ExcludeFromCodeCoverage]
+        public List<IData> ToCalculationFunction()
         {
-            List<Tabela> listaObjekata = context.Tabela.ToList();
+            List<Tabela> listaT = context.Tabela.ToList();
+            List<IData> listaD = new List<IData>();
 
-            listaObjekata.Sort((x, y) => DateTime.Compare(x.VremeProracuna, y.VremeProracuna));
+            listaT.OrderBy(o => o.VremeProracuna).ToList();
 
-            return listaObjekata;
+            foreach (var item in listaT)
+            {
+                listaD.Add(ConvertToData(item));
+            }
+
+            return listaD;
         }
 
-        //funkcija za upis podataka u bazu podataka koje je poslao Client
-        public static void FromClient(double usage, DateTime time, string city)
+        [ExcludeFromCodeCoverage]
+        public void FromCalculationFunction(double result, DateTime time, DateTime lastTime, string funcID)
         {
             int max = GetMaxID();
 
-            Tabela noviPodatak = new Tabela()
-            {
-                ID = ++max,
-                Potrosnja = usage,
-                VremeProracuna = time,
-                PoslednjeVremeMerenja = null,
-                Grad = city,
-                Funkcija = null
-            };
+            IData podatak = new Data(++max, result, time, lastTime, "", funcID);
+            Tabela noviPodatak = ConvertToTabela(podatak);
 
             context.Tabela.Add(noviPodatak);
             context.SaveChanges();
         }
 
-        //funkcija za upis podataka u bazu podataka koje je prolijedio CalculationFunction
-        public static void FromCalculationFunction(double result, DateTime time, DateTime lastTime, string funcID)
+        [ExcludeFromCodeCoverage]
+        public void FromClient(double usage, DateTime time, string city)
         {
             int max = GetMaxID();
 
-            Tabela noviPodatak = new Tabela()
-            {
-                ID = ++max,
-                Potrosnja = result,
-                VremeProracuna = time,
-                PoslednjeVremeMerenja = lastTime,
-                Grad = "",
-                Funkcija = funcID
-            };
+            IData podatak = new Data(++max, usage, time, null, city, null);
+            Tabela noviPodatak = ConvertToTabela(podatak);
 
             context.Tabela.Add(noviPodatak);
             context.SaveChanges();
         }
 
-        //funkcija za proslijedjivanje vrijednosti Client komponenti
-        public static List<Tabela> ToClient()
+        [ExcludeFromCodeCoverage]
+        public List<IData> ToClient()
         {
             List<Tabela> listaObjekata = context.Tabela.ToList();
-            List<Tabela> novaLista = new List<Tabela>();
+            List<IData> novaLista = new List<IData>();
 
-            foreach(Tabela d in listaObjekata)
+            foreach (Tabela d in listaObjekata)
             {
-                if(d.Funkcija != null)
+                if (d.Funkcija != null)
                 {
-                    novaLista.Add(d);
+                    novaLista.Add(ConvertToData(d));
                 }
             }
 
@@ -77,6 +71,7 @@ namespace DataAccess
         }
 
 
+        [ExcludeFromCodeCoverage]
         public static int GetMaxID()
         {
             int max = 0;
@@ -91,6 +86,28 @@ namespace DataAccess
             }
 
             return max;
+        }
+
+        public static Tabela ConvertToTabela(IData obj)
+        {
+            Tabela ret = new Tabela()
+            { 
+                ID = obj.ID,
+                Potrosnja = obj.Potrosnja,
+                VremeProracuna = obj.VremeProracuna,
+                PoslednjeVremeMerenja = obj.PoslednjeVremeMerenja,
+                Grad = obj.Grad,
+                Funkcija = obj.Funkcija
+            };
+
+            return ret;
+        }
+
+        public static IData ConvertToData(Tabela obj)
+        {
+            IData ret = new Data(obj.ID, obj.Potrosnja, obj.VremeProracuna, obj.PoslednjeVremeMerenja, obj.Grad, obj.Funkcija);
+            
+            return ret;
         }
     }
 }
