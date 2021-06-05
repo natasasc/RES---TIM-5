@@ -8,5 +8,7 @@ namespace Common
 {
     public interface ICommunication
     {
+        void FromClient(double usage, DateTime time, string city);
+        List<IData> ToClient();
     }
 }

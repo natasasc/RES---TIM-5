@@ -51,8 +51,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data.cs" />
     <Compile Include="ICommunication.cs" />
     <Compile Include="ICRUD.cs" />
+    <Compile Include="IData.cs" />
     <Compile Include="IExecute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

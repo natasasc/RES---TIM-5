@@ -8,5 +8,7 @@ namespace Common
 {
     public interface ICRUD
     {
+        List<IData> ToCalculationFunction();
+        void FromCalculationFunction(double result, DateTime time, DateTime lastTime, string funcID);
     }
 }
