@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResidentExecutor", "Residen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{3E21D3F6-C94C-44D5-A82C-B864F42E821C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataTest", "DataTest\DataTest.csproj", "{EBD6DCF1-2A76-40CD-923C-2318903EAC0A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{3E21D3F6-C94C-44D5-A82C-B864F42E821C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E21D3F6-C94C-44D5-A82C-B864F42E821C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E21D3F6-C94C-44D5-A82C-B864F42E821C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBD6DCF1-2A76-40CD-923C-2318903EAC0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBD6DCF1-2A76-40CD-923C-2318903EAC0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBD6DCF1-2A76-40CD-923C-2318903EAC0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBD6DCF1-2A76-40CD-923C-2318903EAC0A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
