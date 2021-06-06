@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Common;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,6 +13,14 @@ namespace DataTest
     [TestFixture]
     public class XmlTest
     {
+        IXml _instance;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _instance = new ResidentExecutor.Program();
+        }
+
         [Test]
         [TestCase(null)]
         public void ReadXMLCheck1(string path)
@@ -19,7 +28,7 @@ namespace DataTest
             Assert.Throws<ArgumentNullException>(
                    () =>
                    {
-                       ResidentExecutor.Program.ReadXML(path);
+                       _instance.ReadXML(path);
                    });
         }
 
@@ -31,7 +40,7 @@ namespace DataTest
             Assert.Throws<ArgumentException>(
                    () =>
                    {
-                       ResidentExecutor.Program.ReadXML(path);
+                       _instance.ReadXML(path);
                    });
         }
 
@@ -42,7 +51,7 @@ namespace DataTest
             Assert.Throws<FileNotFoundException>(
                    () =>
                    {
-                       ResidentExecutor.Program.ReadXML(path);
+                       _instance.ReadXML(path);
                    });
         }
 
@@ -56,21 +65,21 @@ namespace DataTest
             Assert.Throws<ArgumentException>(
                    () =>
                    {
-                       ResidentExecutor.Program.LoadNodes(xmlDoc, id, time);
+                       _instance.LoadNodes(xmlDoc, id, time);
                    });
         }
 
         [Test]
         public void LoadXmlCheck2()
         {
-            XmlDocument xmlDoc = ResidentExecutor.Program.ReadXML(Directory.GetCurrentDirectory() + @"\data.xml");
+            XmlDocument xmlDoc = _instance.ReadXML(Directory.GetCurrentDirectory() + @"\data.xml");
             string id = "id";
             string time = "vreme";
 
             Assert.Throws<ArgumentException>(
                    () =>
                    {
-                       ResidentExecutor.Program.LoadNodes(xmlDoc, id, time);
+                       _instance.LoadNodes(xmlDoc, id, time);
                    });
         }
 
@@ -81,7 +90,7 @@ namespace DataTest
             Assert.Throws<ArgumentNullException>(
                    () =>
                    {
-                       ResidentExecutor.Program.Validate(lista);
+                       _instance.Validate(lista);
                    });
         }
 
@@ -93,7 +102,7 @@ namespace DataTest
             Assert.Throws<ArgumentException>(
                    () =>
                    {
-                       ResidentExecutor.Program.Validate(lista);
+                       _instance.Validate(lista);
                    });
         }
 
@@ -107,7 +116,7 @@ namespace DataTest
             Assert.Throws<ArgumentNullException>(
                    () =>
                    {
-                       ResidentExecutor.Program.Work(lista);
+                       _instance.Work(lista);
                    });
         }
 
@@ -121,7 +130,7 @@ namespace DataTest
             Assert.Throws<ArgumentException>(
                    () =>
                    {
-                       ResidentExecutor.Program.Work(lista);
+                       _instance.Work(lista);
                    });
         }
 
@@ -134,7 +143,7 @@ namespace DataTest
             Assert.Throws<FormatException>(
                    () =>
                    {
-                       ResidentExecutor.Program.Work(lista);
+                       _instance.Work(lista);
                    });
         }
 
@@ -146,7 +155,7 @@ namespace DataTest
             Assert.Throws<ArgumentException>(
                    () =>
                    {
-                       ResidentExecutor.Program.WriteData(value);
+                       _instance.WriteData(value);
                    });
         }
     }

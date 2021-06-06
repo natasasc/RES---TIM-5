@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,7 +35,7 @@ namespace DataTest
         public void DataKonstruktorDobriParametri(int id, double potrosnja, string vremeProracuna, 
             string poslednjeVremeMerenja, string grad, string funkcija)
         {
-            Common.Data data;
+            Common.IData data;
 
             DateTime date = GetDate(vremeProracuna);
             DateTime? lastDate = GetLastDate(poslednjeVremeMerenja);
@@ -63,7 +64,7 @@ namespace DataTest
             Assert.Throws<ArgumentException>(
                 () =>
                 {
-                    Common.Data data = new Common.Data(id, potrosnja, date, lastDate, grad, funkcija);
+                    Common.IData data = new Common.Data(id, potrosnja, date, lastDate, grad, funkcija);
                 });
         }
 

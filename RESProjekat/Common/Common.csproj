@@ -56,6 +56,7 @@
     <Compile Include="ICRUD.cs" />
     <Compile Include="IData.cs" />
     <Compile Include="IExecute.cs" />
+    <Compile Include="IXml.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

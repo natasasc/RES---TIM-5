@@ -12,32 +12,33 @@ using System.Text.RegularExpressions;
 
 namespace ResidentExecutor
 {
-    public class Program
+    public class Program : IXml
     {
         private static readonly IExecute f = new CalculationFunction.Functions();
+        private static IXml instance = new Program();
 
         [ExcludeFromCodeCoverage]
         static void Main(string[] args)
         {
             string xmlPath = Directory.GetCurrentDirectory() + @"\data.xml";
-            XmlDocument xmlDoc = ReadXML(xmlPath);
+            XmlDocument xmlDoc = instance.ReadXML(xmlPath);
             string id = "id";
             string time = "time";
-            List<XmlNodeList> lista = LoadNodes(xmlDoc, id, time);
+            List<XmlNodeList> lista = instance.LoadNodes(xmlDoc, id, time);
 
-            List<string> podaci = Validate(lista);
-            Work(podaci);
+            List<string> podaci = instance.Validate(lista);
+            instance.Work(podaci);
 
             //Console.ReadLine();
         }
 
-        public static XmlDocument ReadXML(string path)
+        public XmlDocument ReadXML(string path)
         {
             if (path == null)
             {
                 throw new ArgumentNullException("Naziv fajla ne moze biti null.");
             }
-            if (path.Trim() =="")
+            if (path.Trim() == "")
             {
                 throw new ArgumentException("Naziv fajla ne moze biti prazan.");
             }
@@ -49,7 +50,7 @@ namespace ResidentExecutor
             return xmlDoc;
         }
 
-        public static List<XmlNodeList> LoadNodes(XmlDocument xmlDoc, string id, string time)
+        public List<XmlNodeList> LoadNodes(XmlDocument xmlDoc, string id, string time)
         {
             List<XmlNodeList> ret = new List<XmlNodeList>();
 
@@ -67,7 +68,7 @@ namespace ResidentExecutor
             return ret;
         }
 
-        public static List<string> Validate(List<XmlNodeList> lista)
+        public List<string> Validate(List<XmlNodeList> lista)
         {
             if (lista == null)
                 throw new ArgumentNullException("Lista ne moze biti null.");
@@ -84,10 +85,10 @@ namespace ResidentExecutor
             return podaci;
         }
 
-        public static void Work(List<string> podaci)
+        public void Work(List<string> podaci)
         {
             foreach (var item in podaci)
-            { 
+            {
                 if (item == null)
                     throw new ArgumentNullException("Podaci ne smeju biti null.");
             }
@@ -115,14 +116,14 @@ namespace ResidentExecutor
                     value = f.IdAcceptance(int.Parse(podaci[i]));
                     if (value != -1)
                     {
-                        WriteData(value);
+                        instance.WriteData(value);
                     }
                     System.Threading.Thread.Sleep(seconds * 1000);
                 }
             }
         }
 
-        public static void WriteData(double value)
+        public void WriteData(double value)
         {
             if (value < 0)
             {
@@ -130,7 +131,7 @@ namespace ResidentExecutor
             }
 
             string xmlPath = Directory.GetCurrentDirectory() + @"\funcData.xml";
-            XmlDocument xmlDoc = ReadXML(xmlPath);
+            XmlDocument xmlDoc = instance.ReadXML(xmlPath);
 
             XmlNode potrosnja = xmlDoc.CreateElement("usage");
             potrosnja.InnerText = value.ToString();

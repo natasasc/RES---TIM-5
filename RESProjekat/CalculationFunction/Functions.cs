@@ -105,6 +105,9 @@ namespace CalculationFunction
 
         public double CalculationFunction1(List<double> usages, DateTime poslednjeVrijemeMjerenja)
         {
+            if (usages == null)
+                throw new ArgumentNullException("CF1 ne moze racunati ako nema podataka.");
+
             double average = 0;
             average = usages.Average();
 
@@ -116,6 +119,9 @@ namespace CalculationFunction
 
         public double CalculationFunction2(List<double> usages, DateTime poslednjeVrijemeMjerenja)
         {
+            if (usages == null)
+                throw new ArgumentNullException("CF2 ne moze racunati ako nema podataka.");
+
             double min = 0;
             min = usages.Min();
 
@@ -127,6 +133,9 @@ namespace CalculationFunction
 
         public double CalculationFunction3(List<double> usages, DateTime poslednjeVrijemeMjerenja)
         {
+            if (usages == null)
+                throw new ArgumentNullException("CF3 ne moze racunati ako nema podataka.");
+
             double max = 0;
             max = usages.Max();
 

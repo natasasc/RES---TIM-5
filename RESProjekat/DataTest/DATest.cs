@@ -35,6 +35,7 @@ namespace DataTest
             moq.Setup(o => o.Grad).Returns("Novi Sad");
             moq.Setup(o => o.Funkcija).Returns(func);
             _data = moq.Object;
+
             var moq2 = new Mock<IData>();
             moq2.Setup(o => o.ID).Returns(11);
             moq2.Setup(o => o.Potrosnja).Returns(100);

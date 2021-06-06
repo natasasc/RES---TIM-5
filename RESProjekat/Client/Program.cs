@@ -40,7 +40,7 @@ namespace Client
 
                 potrosnja++;
 
-                Thread.Sleep(10000);
+                Thread.Sleep(2000);
             }
         }
 
@@ -49,9 +49,10 @@ namespace Client
         {
             while (true)
             {
-                Console.WriteLine("Izaberite opciju 1 ili 2:");
+                Console.WriteLine("**************************************************");
+                Console.WriteLine("\nIzaberite opciju 1 ili 2:");
                 Console.WriteLine("\t1. Upis nove potrosnje");
-                Console.WriteLine("\t2. Citanje podataka iz baze");
+                Console.WriteLine("\t2. Citanje rezultata funkcija iz baze");
                 string unos = Console.ReadLine();
 
                 if (unos == "1")

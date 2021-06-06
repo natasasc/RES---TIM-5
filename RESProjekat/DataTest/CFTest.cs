@@ -91,6 +91,19 @@ namespace DataTest
         }
 
         [Test]
+        public void CF1CheckNull()
+        {
+            List<double> usages = null;
+            DateTime poslednjeVrijemeMjerenja = new DateTime(2021, 5, 24, 18, 55, 22, 0);
+
+            Assert.Throws<ArgumentNullException>(
+                   () =>
+                   {
+                       _exe.CalculationFunction1(usages, poslednjeVrijemeMjerenja);
+                   });
+        }
+
+        [Test]
         public void CF2Check()
         {
             List<double> usages = new List<double>();
@@ -103,6 +116,19 @@ namespace DataTest
         }
 
         [Test]
+        public void CF2CheckNull()
+        {
+            List<double> usages = null;
+            DateTime poslednjeVrijemeMjerenja = new DateTime(2021, 5, 24, 18, 55, 22, 0);
+
+            Assert.Throws<ArgumentNullException>(
+                   () =>
+                   {
+                       _exe.CalculationFunction2(usages, poslednjeVrijemeMjerenja);
+                   });
+        }
+
+        [Test]
         public void CF3Check()
         {
             List<double> usages = new List<double>();
@@ -112,6 +138,19 @@ namespace DataTest
             DateTime poslednjeVrijemeMjerenja = new DateTime(2021, 5, 24, 18, 55, 22, 0);
 
             Assert.AreEqual(75, _exe.CalculationFunction3(usages, poslednjeVrijemeMjerenja));
+        }
+
+        [Test]
+        public void CF3CheckNull()
+        {
+            List<double> usages = null;
+            DateTime poslednjeVrijemeMjerenja = new DateTime(2021, 5, 24, 18, 55, 22, 0);
+
+            Assert.Throws<ArgumentNullException>(
+                   () =>
+                   {
+                       _exe.CalculationFunction3(usages, poslednjeVrijemeMjerenja);
+                   });
         }
 
         [Test]
