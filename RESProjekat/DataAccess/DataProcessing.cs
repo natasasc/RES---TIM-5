@@ -74,15 +74,19 @@ namespace DataAccess
         [ExcludeFromCodeCoverage]
         public static int GetMaxID()
         {
+            object lockObj = new object();
             int max = 0;
 
-            List<Tabela> lista = new List<Tabela>();
-            lista = context.Tabela.ToList();
-            max = lista[0].ID;
-            foreach (Tabela t in lista)
+            lock (lockObj)
             {
-                if (t.ID > max)
-                    max = t.ID;
+                List<Tabela> lista = new List<Tabela>();
+                lista = context.Tabela.ToList();
+                max = lista[0].ID;
+                foreach (Tabela t in lista)
+                {
+                    if (t.ID > max)
+                        max = t.ID;
+                }
             }
 
             return max;
